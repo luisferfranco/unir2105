@@ -1,0 +1,12 @@
+body {
+  background-color: #f4f1de;
+}
+
+.avatar {
+  height: 75px;
+}
+
+.fecha-superior {
+  color: #777;
+  font-size: 85%;
+}
