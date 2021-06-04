@@ -1,5 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Mate+SC&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+
 body {
   background-color: #f4f1de;
+  font-family: Lato, sans-serif;
 }
 
 .avatar {
@@ -9,4 +13,26 @@ body {
 .fecha-superior {
   color: #777;
   font-size: 85%;
+}
+
+.titulo-proyecto {
+  font-family: 'Mate SC', Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  color: #c00;
+  border-bottom: 1px solid #888;
+  margin-bottom: 15px;
+}
+
+.card-img {
+  height: 200px;
+  object-fit: cover;
+}
+
+.tarjeta {
+  height: 100%;
+}
+
+.fecha-proyecto {
+  color: #777;
+  font-size: 70%;
 }
