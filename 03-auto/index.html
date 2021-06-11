@@ -12,33 +12,16 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="container mt-4">
-      <div class="row">
-        <div class="col-8 offset-2">
-          <div class="card shadow rounded-3">
-            <div class="card-header">
-              <h1 class="text-center mt-4 mb-4">Contador</h1>
-            </div>
-            <div class="card-body mx-auto">
-              <div class="bg-danger p-4 shadow rounded-3 text-warning mb-4">
-                <h1 id="contador" class="text-center">0</h1>
-              </div>
-              <button onclick="cambio(-1)" class="btn btn-outline-danger">
-                Decrementar
-              </button>
-              <button onclick="cambio(0)" class="btn btn-outline-primary">
-                Reiniciar
-              </button>
-              <button onclick="cambio(+1)" class="btn btn-outline-success">
-                Incrementar
-              </button>
-              <button onclick="cambio(+3)" class="btn btn-outline-success">
-                Incrementar +5
-              </button>
-            </div>
-          </div>
+      <div class="card rounded shadow">
+        <div class="card-body">
+          <img src="/img/wrangler.png" class="img-modelo" />
+          <h3 class="modelo py-4">Wrangler</h3>
+          <p class="et-precio">Precio Inicial</p>
+          <p>$999,900.00</p>
         </div>
       </div>
     </div>
@@ -52,38 +35,6 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.7.0/d3.min.js"
       referrerpolicy="no-referrer"
     ></script>
-    <script>
-      // DRY - Don't Repeat Yourself
-
-      let c = 0
-
-      let contador = d3.select('#contador')
-
-      // function dec() {
-      //   c = c - 1
-      //   contador.text(c)
-      // }
-
-      // function inc() {
-      //   c = c + 1
-      //   contador.text(c)
-      // }
-
-      // function reset() {
-      //   c = 0
-      //   contador.text(c)
-      // }
-
-      // refactoring
-      function cambio(d) {
-        // c = c + d (equivalente)
-        if (d == 0) {
-          c = 0
-        } else {
-          c += d
-        }
-        contador.text(c)
-      }
-    </script>
+    <script></script>
   </body>
 </html>

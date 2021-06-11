@@ -1,0 +1,16 @@
+.img-modelo {
+  height: 180px;
+}
+
+.modelo {
+  color: rgba(42, 99, 223, 0.925);
+  font-weight: bold;
+  letter-spacing: 1px;
+  border-bottom: 1px solid #888;
+  text-transform: uppercase;
+}
+
+.et-precio {
+  font-size: 75%;
+  color: #666;
+}
