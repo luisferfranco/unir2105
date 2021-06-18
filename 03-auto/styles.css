@@ -7,7 +7,7 @@
   font-weight: bold;
   letter-spacing: 1px;
   border-bottom: 1px solid #888;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
 }
 
 .et-precio {

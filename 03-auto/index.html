@@ -16,14 +16,33 @@
   </head>
   <body>
     <div class="container mt-4">
-      <div class="card rounded shadow">
-        <div class="card-body">
-          <img src="/img/wrangler.png" class="img-modelo" />
-          <h3 class="modelo py-4">Wrangler</h3>
-          <p class="et-precio">Precio Inicial</p>
-          <p>$999,900.00</p>
+      <h1 class="mb-4 mt-4">Modelos 2021</h1>
+
+      <form class="row mb-4">
+        <div class="col-6">
+          <label for="categoria">Categoría</label>
+          <select
+            name="categoria"
+            id="categoria"
+            class="form-control"
+            onchange="filtro()"
+          >
+            <option value="todas">Todas</option>
+          </select>
         </div>
-      </div>
+
+        <div class="col-6">
+          <label for="modelo">Modelo</label>
+          <input
+            type="text"
+            id="modelo"
+            class="form-control"
+            onkeyup="filtro()"
+          />
+        </div>
+      </form>
+
+      <div class="row" id="autos"></div>
     </div>
 
     <script
@@ -35,6 +54,68 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.7.0/d3.min.js"
       referrerpolicy="no-referrer"
     ></script>
-    <script></script>
+    <script>
+      const selCategoria = d3.select('#categoria')
+      const modelo = d3.select('#modelo')
+      const autos = d3.select('#autos')
+
+      let allData = []
+      let categorias = []
+
+      d3.csv('jeep.csv').then((data) => {
+        allData = data
+
+        console.log(allData)
+
+        categorias = new Set(d3.map(data, (d) => d.categoria))
+        console.log(categorias)
+        categorias.forEach((c) => {
+          console.log(c)
+          selCategoria.append('option').attr('value', c).text(c)
+        })
+
+        render(data)
+      })
+
+      function render(data) {
+        autos.text('')
+
+        data.forEach((d) => {
+          autos.append('div').attr('class', 'col-12 col-xl-4 col-md-6 mb-4')
+            .html(`
+          <div class="card rounded shadow h-100">
+            <div class="card-body">
+              <img src="/img/${d.imagen}" class="img-modelo" />
+              <h3 class="modelo py-4">${d.modelo}</h3>
+              <p>${d.categoria}</p>
+              <p class="et-precio">Precio Inicial</p>
+              <p>${d.precio}</p>
+            </div>
+          </div>
+          `)
+        })
+      }
+
+      function filtro() {
+        const categoria = selCategoria.node().value
+        console.log(categoria)
+
+        let data = allData
+
+        if (categoria != 'todas') {
+          data = d3.filter(allData, (d) => d.categoria == categoria)
+        }
+
+        const mod = modelo.node().value
+        console.log(mod)
+        if (mod != null) {
+          data = d3.filter(data, (d) =>
+            d.modelo.toLowerCase().includes(mod.toLowerCase())
+          )
+        }
+
+        render(data)
+      }
+    </script>
   </body>
 </html>
