@@ -28,32 +28,16 @@
           <h3 class="subtitulo">Busca por nombre, ciudad o país</h3>
           <div class="row">
             <div class="col-10">
-              <input type="text" id="busqueda" class="form-control" />
+              <input type="text" id="busqueda" class="form-control" onkeyup="filtro()" />
             </div>
             <div class="col-2">
               <button class="btn btn-primary">
-                <i class="fas fa-sync"></i>
+                <i class="fas fa-sync" onclick="load()"></i>
               </button>
             </div>
           </div>
         </div>
-        <div class="card-body">
-          <div class="d-flex">
-            <div class="flex-shrink-0">
-              <img
-                src="https://randomuser.me/api/portraits/women/63.jpg"
-                alt="..."
-                class="rounded-circle avatar"
-              />
-            </div>
-            <div class="flex-grow-1 ms-3 user-info">
-              <div class="nombre">
-                <h3>Julia Roberts</h3>
-              </div>
-              <div class="ubicacion">5964 W Dallas St, TX, Unites States</div>
-            </div>
-          </div>
-        </div>
+        <div class="card-body" id="personas"></div>
       </div>
     </div>
 
@@ -66,5 +50,6 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.7.0/d3.min.js"
       referrerpolicy="no-referrer"
     ></script>
+    <script src="app.js"></script>
   </body>
 </html>
