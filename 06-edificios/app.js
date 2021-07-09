@@ -19,7 +19,7 @@ const svg = graf
 
 const margin = {
   top: 50,
-  bottom: 150,
+  bottom: 250,
   left: 150,
   right: 50,
 }
@@ -86,12 +86,48 @@ function render(data) {
     .range([0, ancho])
     .paddingInner(0.2)
 
-  barras
-    .enter()
-    .append('rect')
-    .attr('x', d => x(d.edificio))
-    .attr('y', d => y(d.oficial))
-    .attr('width', x.bandwidth())
-    .attr('height', d => alto - y(d.oficial))
+  let color = d3.scaleOrdinal()
+    .domain(d3.map(allData, d => d.region))
+    // .range(d3.schemeCategory10)
+    .range(['#ff595e', '#ffca3a', '#8ac926', '#1982c4', '#6a4c93'])
 
+
+  const xAxisGroup = g.append('g')
+    .attr('transform', `translate(0, ${alto})`)
+    .attr('class', 'ejes')
+    .call(
+      d3.axisBottom(x)
+        .tickSize(-alto)
+    )
+    .selectAll('text')
+    .attr('text-anchor', 'end')
+    .attr('transform', 'rotate(-90)')
+    .attr('y', -15)
+    .attr('x', -10)
+
+  const yAxisGroup = g.append('g')
+      .attr('class', 'ejes')
+      .call(
+        d3.axisLeft(y)
+          .ticks(4)
+          .tickSize(-ancho)
+          .tickFormat(d => `${d} m.`)
+      )
+
+  barras
+      .enter()
+      .append('rect')
+      .attr('x', d => x(d.edificio))
+      .attr('y', d => y(d.oficial))
+      .attr('fill', d => color(d.region))
+      .attr('width', x.bandwidth())
+      .attr('height', d => alto - y(d.oficial))
+
+  titleGroup = g.append('g')
+        .append('text')
+        .attr('text-anchor', 'middle')
+        .attr('x', ancho/2)
+        .attr('y', 45)
+        .attr('class', 'titulo')
+        .text('Los diez edificios más altos del mundo')
 }
