@@ -1,7 +1,10 @@
 const graf = d3.select('#graf')
-const selectVar = d3.select('#variable')
 const anchoTotal = graf.style('width').slice(0, -2)
 const altoTotal = (anchoTotal * 9) / 16
+
+// ids de HTML
+const selectVar = d3.select('#variable')
+const selectNum = d3.select('#numero')
 
 const svg = graf
   .append('svg')
@@ -48,6 +51,8 @@ const g = svg
 
 let allData = []
 let txtVariable = 'oficial'
+let numRegistros = 10
+
 let y = d3.scaleLinear()
   .range([alto, 0])
 
@@ -77,12 +82,10 @@ d3.csv('edificios.csv').then(data => {
     d.puesto = +d.puesto
     d.ultimopiso = +d.ultimopiso
   })
-  console.log(data)
 
-  allData = data.slice(0, 10)
-  console.log(allData)
+  allData = data
 
-  render(allData)
+  render(allData.slice(0, numRegistros))
 })
 
 function render(data) {
@@ -118,22 +121,32 @@ function render(data) {
 
   barras
       .enter()
-      .append('rect')
-        .attr('x', d => x(d.edificio))
-        .attr('y', y(0))
-        .attr('width', x.bandwidth())
-        .attr('height', alto - y(0))
-        .attr('fill', 'black')
+        .append('rect')
+          .attr('y', y(0))
+          .attr('x', d => x(d.edificio))
+          .attr('width', x.bandwidth())
+          .attr('height', alto - y(0))
+          .attr('fill', 'green')
       .merge(barras)
-      .transition()
-      .duration(2000)
-      .ease(d3.easeBounce)
-        .attr('y', d => {
-          console.log(txtVariable)
-          return y(d[txtVariable])
-        })
-        .attr('fill', d => color(d.region))
-        .attr('height', d => alto - y(d[txtVariable]))
+        .transition()
+        .duration(2000)
+        .ease(d3.easeBounce)
+          .attr('x', d => x(d.edificio))
+          .attr('width', x.bandwidth())
+          .attr('y', d => {
+            console.log(txtVariable)
+            return y(d[txtVariable])
+          })
+          .attr('fill', d => color(d.region))
+          .attr('height', d => alto - y(d[txtVariable]))
+
+  barras.exit()
+          .transition()
+          .duration(2000)
+          .attr('height', alto - y(0))
+          .attr('y', y(0))
+          .attr('fill', '#f00')
+          .remove()
 
   // titleGroup = g.append('g')
   //       .append('text')
@@ -147,4 +160,9 @@ function render(data) {
 selectVar.on('change', () => {
   txtVariable = selectVar.node().value
   render(allData)
+})
+
+selectNum.on('change', () => {
+  numRegistros = selectNum.node().value
+  render(allData.slice(0, numRegistros))
 })
