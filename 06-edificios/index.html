@@ -20,7 +20,25 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="container mt-4" id="graf">
+    <div class="container mt-4">
+      <div class="row">
+        <div class="col-3">
+          <div class="card">
+            <div class="card-body">
+              <h3>Controles</h3>
+              Qué variable dibujo
+              <select id="variable" class="form-control">
+                <option value="oficial">Altura Oficial</option>
+                <option value="antena">Altura con la Antena</option>
+                <option value="ultimopiso">Altura al último piso</option>
+                <option value="piso">Número de Pisos</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-9" id="graf">
+        </div>
+      </div>
     </div>
 
     <script

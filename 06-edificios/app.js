@@ -1,4 +1,5 @@
 const graf = d3.select('#graf')
+const selectVar = d3.select('#variable')
 const anchoTotal = graf.style('width').slice(0, -2)
 const altoTotal = (anchoTotal * 9) / 16
 
@@ -46,6 +47,25 @@ const g = svg
 //   .attr('fill', 'none')
 
 let allData = []
+let txtVariable = 'oficial'
+let y = d3.scaleLinear()
+  .range([alto, 0])
+
+let x = d3.scaleBand()
+  .range([0, ancho])
+  .paddingInner(0.2)
+  .paddingOuter(0.5)
+
+let color = d3.scaleOrdinal()
+  .range(['#ff595e', '#ffca3a', '#8ac926', '#1982c4', '#6a4c93'])
+
+const xAxisGroup = g.append('g')
+  .attr('transform', `translate(0, ${alto})`)
+  .attr('class', 'ejes')
+
+const yAxisGroup = g.append('g')
+    .attr('class', 'ejes')
+
 
 d3.csv('edificios.csv').then(data => {
   data.forEach(d => {
@@ -69,33 +89,13 @@ function render(data) {
   // [binding] ENTER - update - exit
   let barras = g.selectAll('rect').data(data)
 
-  // barras
-  //   .enter()
-  //   .append('rect')
-  //   .attr('x', (d, i) => i*80)
-  //   .attr('y', 0)
-  //   .attr('width', 70)
-  //   .attr('height', d => d.oficial)
+  y.domain([0, d3.max(data, d => d[txtVariable])])
+  x.domain(data.map(d => d.edificio))
+  color.domain(d3.map(allData, d => d.region))
 
-  let y = d3.scaleLinear()
-    .domain([0, d3.max(data, d => d.oficial)])
-    .range([alto, 0])
-
-  let x = d3.scaleBand()
-    .domain(data.map(d => d.edificio))
-    .range([0, ancho])
-    .paddingInner(0.2)
-    .paddingOuter(0.5)
-
-  let color = d3.scaleOrdinal()
-    .domain(d3.map(allData, d => d.region))
-    // .range(d3.schemeCategory10)
-    .range(['#ff595e', '#ffca3a', '#8ac926', '#1982c4', '#6a4c93'])
-
-
-  const xAxisGroup = g.append('g')
-    .attr('transform', `translate(0, ${alto})`)
-    .attr('class', 'ejes')
+  xAxisGroup
+    .transition()
+    .duration(2000)
     .call(
       d3.axisBottom(x)
         .tickSize(-alto)
@@ -106,13 +106,14 @@ function render(data) {
     .attr('y', -15)
     .attr('x', -10)
 
-  const yAxisGroup = g.append('g')
-      .attr('class', 'ejes')
-      .call(
+  yAxisGroup
+    .transition()
+    .duration(2000)
+    .call(
         d3.axisLeft(y)
           .ticks(4)
           .tickSize(-ancho)
-          .tickFormat(d => `${d} m.`)
+          .tickFormat(d => `${d} ${ txtVariable == 'piso' ? 'pisos' : 'm.' }`)
       )
 
   barras
@@ -123,18 +124,27 @@ function render(data) {
         .attr('width', x.bandwidth())
         .attr('height', alto - y(0))
         .attr('fill', 'black')
+      .merge(barras)
       .transition()
       .duration(2000)
       .ease(d3.easeBounce)
-        .attr('y', d => y(d.oficial))
+        .attr('y', d => {
+          console.log(txtVariable)
+          return y(d[txtVariable])
+        })
         .attr('fill', d => color(d.region))
-        .attr('height', d => alto - y(d.oficial))
+        .attr('height', d => alto - y(d[txtVariable]))
 
-  titleGroup = g.append('g')
-        .append('text')
-        .attr('text-anchor', 'middle')
-        .attr('x', ancho/2)
-        .attr('y', 45)
-        .attr('class', 'titulo')
-        .text('Los diez edificios más altos del mundo')
+  // titleGroup = g.append('g')
+  //       .append('text')
+  //       .attr('text-anchor', 'middle')
+  //       .attr('x', ancho/2)
+  //       .attr('y', 45)
+  //       .attr('class', 'titulo')
+  //       .text('Los diez edificios más altos del mundo')
 }
+
+selectVar.on('change', () => {
+  txtVariable = selectVar.node().value
+  render(allData)
+})
