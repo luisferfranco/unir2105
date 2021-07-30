@@ -10,9 +10,9 @@ const svg = graf
 
 const margin = {
   top: 50,
-  bottom: 250,
-  left: 150,
-  right: 50,
+  bottom: 85,
+  left: 55,
+  right: 30,
 }
 
 const ancho = anchoTotal - margin.left - margin.right
@@ -41,6 +41,15 @@ const yearDisplay = g
 // !VARIABLES GLOBALES
 let allData = []
 let year = 0
+let minYear, maxYear
+let corriendo = false
+let intervalo
+
+// !ELEMENTOS DEL GUI
+const txtYear = d3.select('#txt-year')
+const btnAtras = d3.select('#btn-atras')
+const btnPlay = d3.select('#btn-play')
+const btnAdelante = d3.select('#btn-adelante')
 
 // !ESCALADORES
 let x = d3.scaleLog().range([0, ancho])
@@ -65,7 +74,10 @@ function carga() {
     )
 
     allData = datos
-    year = d3.min(datos, (d) => d.year)
+    txtYear.attr('value', year)
+    minYear = d3.min(datos, (d) => d.year)
+    maxYear = d3.max(datos, (d) => d.year)
+    year = minYear
 
     // !DOMINIOS DE LOS ESCALADORES
     x.domain([d3.min(datos, (d) => d.income), d3.max(datos, (d) => d.income)])
@@ -100,17 +112,44 @@ function carga() {
 function dibujo(datos) {
   yearDisplay.text(year)
 
-  burbujas = g.selectAll('circle').data(datos)
+  burbujas = g.selectAll('circle').data(datos, (d) => d.country)
 
   burbujas
     .enter()
     .append('circle')
     .attr('cx', (d) => x(d.income))
     .attr('cy', (d) => y(d.life_exp))
-    .attr('r', (d) => r(d.population))
-    .attr('fill', (d) => color(d.continent))
+    .attr('r', 0)
     .attr('fill-opacity', 0.5)
     .attr('stroke', '#bbb')
+    .attr('fill', '#0d0')
+    .transition()
+    .duration(325)
+    .attr('r', 125)
+    .transition()
+    .duration(325)
+    .attr('r', (d) => r(d.population))
+    .attr('fill', (d) => color(d.continent))
+
+  burbujas
+    .merge(burbujas)
+    .transition()
+    .duration(750)
+    .attr('cx', (d) => x(d.income))
+    .attr('cy', (d) => y(d.life_exp))
+    .attr('r', (d) => r(d.population))
+    .attr('fill', (d) => color(d.continent))
+
+  burbujas
+    .exit()
+    .transition()
+    .duration(325)
+    .attr('r', 125)
+    .attr('fill', '#d00')
+    .transition()
+    .duration(325)
+    .attr('r', 0)
+    .remove()
 }
 
 function cuadro() {
@@ -118,4 +157,50 @@ function cuadro() {
   dibujo(data)
 }
 
+function changeYear(inc) {
+  console.log(year)
+  year += inc
+  console.log(year)
+
+  if (year > maxYear) year = maxYear
+  if (year < minYear) year = minYear
+
+  txtYear.attr('value', year)
+  cuadro()
+}
+
 carga()
+
+// !EVENT LISTENERS PARA EL GUI
+txtYear.on('change', () => {
+  year = +txtYear.node().value
+  // console.log(year)
+  cuadro()
+})
+
+btnAtras.on('click', () => {
+  // year--
+  // txtYear.attr('value', year)
+  changeYear(-1)
+})
+
+btnPlay.on('click', () => {
+  corriendo = !corriendo
+  if (corriendo) {
+    btnPlay.html("<i class='fas fa-pause'></i>")
+    btnPlay.classed('btn-danger', true)
+    btnPlay.classed('btn-success', false)
+    intervalo = d3.interval(() => changeYear(1), 750)
+  } else {
+    btnPlay.html("<i class='fas fa-play'></i>")
+    btnPlay.classed('btn-danger', false)
+    btnPlay.classed('btn-success', true)
+    intervalo.stop()
+  }
+})
+
+btnAdelante.on('click', () => {
+  // year++
+  // txtYear.attr('value', year)
+  changeYear(1)
+})
