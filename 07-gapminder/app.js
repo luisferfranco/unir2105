@@ -1,3 +1,7 @@
+// TODO: 1. Filtro para seleccionar solo un continente
+// TODO: 2. Implementar un "slider" (range)
+// TODO: 3. Implementar un tooltip
+
 const graf = d3.select('#graf')
 const anchoTotal = graf.style('width').slice(0, -2)
 const altoTotal = (anchoTotal * 9) / 16
