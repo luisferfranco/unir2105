@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Otomanopee+One&display=swap');
+
+#graf {
+  background-color: #ccc;
+  position: relative;
+}
+
+.ejes {
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  color: #999;
+}
+
+.titulo {
+  font-family: 'Otomanopee One', sans-serif;
+  font-size: 35px;
+  stroke: #93333d;
+}
+
+.numerote {
+  font-family: 'Otomanopee One', sans-serif;
+  font-size: 100px;
+  fill: #bbb;
+}
+
+#tooltip {
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  width: 200px;
+  background-color: #d7d7d7;
+  border-radius: 12px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+}
+
+#tooltip-header {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background-color: #ccc8c8;
+  padding: 10px 20px;
+}
+
+#tooltip-body {
+  padding: 10px 20px;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
