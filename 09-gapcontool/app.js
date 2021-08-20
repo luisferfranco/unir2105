@@ -1,6 +1,8 @@
 // TODO: 1. Filtro para seleccionar solo un continente
 // TODO: 2. Implementar un "slider" (range)
-// TODO: 3. Implementar un tooltip
+//// 3. Implementar un tooltip
+// TODO: 4. Implementar un path para limpiar las burbujas en el
+//          area gráfica
 
 const graf = d3.select('#graf')
 const tooltip = d3.select('#tooltip')
